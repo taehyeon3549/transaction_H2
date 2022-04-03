@@ -7,18 +7,6 @@ server:
   servlet:
     context-path: /tran
 
-  datasource:
-    driver-class-name: org.h2.Driver
-    jdbc-url: jdbc:h2:mem:testdb2;DB_CLOSE_DELAY=-1;MODE=MySQL # spring-data-jdbc 설정을 위한 url
-    url: jdbc:h2:mem:testdb2;DB_CLOSE_DELAY=-1;MODE=MySQL   # SqlSessionFactoryBean config 설정을 위한 url
-    #    jdbc-url: jdbc:h2:tcp://localhost:9092/~/test # Tcp, Server 모드 주소 설정
-    username: sa
-    password:
-    initialization-mode: always
-    sql-script-encoding: utf-8
-    schema: classpath:schema.sql # spring boot startup 시, 특정 경로의 schema.sql 실행
-
-
 spring:
   # H2 메모리 DB를 위한 설정
   h2:
@@ -32,6 +20,14 @@ spring:
   datasource:
      initialization-mode: always
      sql-script-encoding: utf-8
+     username: sa
+     password:
+#     schema: classpath:/schema.sql    # DB 생성시 스키마 실행 (안됨)
+  sql:
+    init:
+      mode: always
+  jpa:
+    defer-datasource-initialization: true
 
   db1:
     datasource:
@@ -42,18 +38,31 @@ spring:
       password:
       config-location: classpath:/sql/Db1SqlMapConfig.xml
       mapper-locations: classpath:/sql/mapper/db1/**/*.xml
-#    schema: classpath:schema.sql # spring boot startup 시, 특정 경로의 schema.sql 실행
+      schema: schema.sql # spring boot startup 시, 특정 경로의 schema.sql 실행
+
+    sql:
+      init:
+        mode: always
+    jpa:
+      defer-datasource-initialization: true
+
 
   # H2 메모리 DB를 위한 설정
   db2:
     datasource:
       driver-class-name: org.h2.Driver
       url: jdbc:h2:mem:testdb2   # SqlSessionFactoryBean config 설정을 위한 url
-      jdbc-url: jdbc:h2:mem:testdb # Tcp, Server 모드 주소 설정
+      jdbc-url: jdbc:h2:mem:testdb2 # Tcp, Server 모드 주소 설정
       username: sa
       password:
       config-location: classpath:/sql/Db2SqlMapConfig.xml
       mapper-locations: classpath:/sql/mapper/db2/**/*.xml
+
+    sql:
+      init:
+        mode: always
+    jpa:
+      defer-datasource-initialization: true
 
 
 #  # 단일 DB 설정
