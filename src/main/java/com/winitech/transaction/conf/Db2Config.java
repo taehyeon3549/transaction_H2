@@ -1,7 +1,6 @@
 package com.winitech.transaction.conf;
 
-import com.winitech.transaction.mapper.db1.Db1ConnMapper;
-import com.winitech.transaction.mapper.db2.Db2ConnMapper;
+import com.winitech.transaction.mapper.Db2ConnMapper;
 import com.zaxxer.hikari.HikariDataSource;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -23,7 +22,7 @@ import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import javax.sql.DataSource;
 
 @Configuration
-@MapperScan(basePackages = "com.winitech.transaction.mapper.db2", annotationClass= Db2ConnMapper.class, sqlSessionFactoryRef = "db2SqlSessionFactory")
+@MapperScan(basePackages = "com.winitech.transaction.mapper", annotationClass= Db2ConnMapper.class, sqlSessionFactoryRef = "db2SqlSessionFactory")
 public class Db2Config {
 	@Value("${spring.db2.datasource.config-location}")	    String config;
 	@Value("${spring.db2.datasource.mapper-locations}")		String mapper;

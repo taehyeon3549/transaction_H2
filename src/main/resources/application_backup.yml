@@ -8,6 +8,13 @@ server:
     context-path: /tran
 
 spring:
+  sql:
+    init:
+      mode: always
+
+  jpa:
+    defer-datasource-initialization: true
+
   # H2 메모리 DB를 위한 설정
   h2:
     console:
@@ -17,49 +24,40 @@ spring:
         trace: false                        # Print additional trace information
         web-allow-others: true    # 브라우저로 접근가능하게 하기
 
+  datasource:
+    url: jdbc:h2:mem:testdb1
+    driverClassName: org.h2.Driver
+    initialization-mode: always
+    sql-script-encoding: utf-8
+    username: sa
+    password:
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      dialect: org.hibernate.dialect.H2Dialect
+#    schema: classpath:/schema.sql # spring boot startup 시, 특정 경로의 schema.sql 실행
+
   db1:
     datasource:
-      jdbc-url: --
-      driver-class-name: oracle.jdbc.OracleDriver
-      username:
+      driver-class-name: org.h2.Driver
+      driverClassName: org.h2.Driver
+      url: jdbc:h2:mem:testdb1  # SqlSessionFactoryBean config 설정을 위한 url
+      jdbc-url: jdbc:h2:mem:testdb1 # Tcp, Server 모드 주소 설정
+      username: sa
       password:
       config-location: classpath:/sql/Db1SqlMapConfig.xml
       mapper-locations: classpath:/sql/mapper/db1/**/*.xml
 
+  # H2 메모리 DB를 위한 설정
   db2:
     datasource:
-      jdbc-url:
-      driver-class-name: org.postgresql.Driver
-      username:
+      driver-class-name: org.h2.Driver
+      driverClassName: org.h2.Driver
+      url: jdbc:h2:mem:testdb2   # SqlSessionFactoryBean config 설정을 위한 url
+      jdbc-url: jdbc:h2:mem:testdb2 # Tcp, Server 모드 주소 설정
+      username: sa
       password:
       config-location: classpath:/sql/Db2SqlMapConfig.xml
       mapper-locations: classpath:/sql/mapper/db2/**/*.xml
-
-  # H2 메모리 DB를 위한 설정
-  # http://www.h2database.com/html/tutorial.html
-  db3:
-    datasource:
-      platform : h2
-      name: testdb1
-      jdbc-url: jdbc:h2:mem:testdb1
-      url: jdbc:h2:mem:testdb1
-      driverClassName: org.h2.Driver
-      sql-script-encoding: utf-8
-      username: sa
-      password:
-      initialization-mode: always
-      schema-location: schema.sql
-      mapper-locations: classpath:/sql/mapper/**/*.xml
-#      schema: file:D:/studyProj/transaction/src/main/resources/schema.sql
-#      schema: classpath*:sql/schema.sql # spring boot startup 시, 특정 경로의 schema.sql 실행
-
-      sql:
-        init:
-          mode: always
-
-      jpa:
-        defer-datasource-initialization: true
-
 
 #  # 단일 DB 설정
 #server:

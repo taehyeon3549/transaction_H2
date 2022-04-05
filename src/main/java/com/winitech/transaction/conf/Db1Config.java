@@ -1,6 +1,6 @@
 package com.winitech.transaction.conf;
 
-import com.winitech.transaction.mapper.db1.Db1ConnMapper;
+import com.winitech.transaction.mapper.Db1ConnMapper;
 import com.zaxxer.hikari.HikariDataSource;
 import lombok.extern.log4j.Log4j2;
 import org.apache.ibatis.session.SqlSession;
@@ -16,7 +16,6 @@ import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
@@ -25,7 +24,7 @@ import javax.sql.DataSource;
 import java.util.Arrays;
 
 @Configuration
-@MapperScan(basePackages = "com.winitech.transaction.mapper.db1", annotationClass= Db1ConnMapper.class, sqlSessionFactoryRef = "db1SqlSessionFactory")
+@MapperScan(basePackages = "com.winitech.transaction.mapper" ,annotationClass= Db1ConnMapper.class, sqlSessionFactoryRef = "db1SqlSessionFactory")
 @Log4j2
 //@MapperScan("com.winitech.transaction.mapper")		//@Mapper 어노테이션을 사용했으므로 비활성화, package단위로 scan 가능
 public class Db1Config {

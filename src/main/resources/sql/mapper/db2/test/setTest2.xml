@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http#{//mybatis.org/dtd/mybatis-3-mapper.dtd">
 <!-- 각 파일의 namespace가 중복 되지 않도록 설정 -->
-<mapper namespace="com.winitech.transaction.mapper.db2.SetTestMapper2">
+<mapper namespace="com.winitech.transaction.mapper.SetTestMapper2">
 
     <insert id="insert" parameterType="String">
         INSERT INTO MEMBER
@@ -9,8 +9,7 @@
     </insert>
 
     <select id="selectList" resultType="Map">
-        SELECT *
-            FROM MEMBER
+        select now()
     </select>
 
 </mapper>

@@ -1,7 +1,6 @@
-package com.winitech.transaction.mapper.db2;
+package com.winitech.transaction.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
-import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Map;

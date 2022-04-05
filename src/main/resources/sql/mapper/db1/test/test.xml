@@ -1,16 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http#{//mybatis.org/dtd/mybatis-3-mapper.dtd">
 <!-- 각 파일의 namespace가 중복 되지 않도록 설정 -->
-<mapper namespace="com.winitech.transaction.mapper.db1.TestMapper">
+<mapper namespace="com.winitech.transaction.mapper.TestMapper">
 
     <insert id="insert" parameterType="String">
-        INSERT INTO MEMBER
-            VALUES ('${value, jdbcType=VARCHAR}','1')
+
     </insert>
 
     <select id="selectList" resultType="Map">
-        SELECT *
-            FROM MEMBER
+        SELECT sysdate
+            FROM dual
     </select>
 
 </mapper>
