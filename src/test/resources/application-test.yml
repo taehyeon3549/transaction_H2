@@ -1,0 +1,80 @@
+spring:
+  profiles:
+    active: test
+  config:
+    use-legacy-processing: true
+---
+
+server:
+  port: 8081
+  servlet:
+    context-path: /tran
+
+---
+
+# 운영 환경에서는 false 필히 하기!!
+decorator:
+  datasource:
+    p6spy:
+      enable-logging: true
+
+---
+# H2 메모리 DB를 위한 설정
+# http://www.h2database.com/html/tutorial.html
+spring:
+  h2:
+    console:
+      enabled: true                            # h2 콘솔 사용
+      path: /h2                                    # localhost:port/h2 로 접근 가능
+      settings:
+        trace: false                        # Print additional trace information
+        web-allow-others: true    # 브라우저로 접근가능하게 하기
+
+  db1:
+    datasource:
+      jdbc-url: jdbc:h2:mem:oraltest;MODE=Oracle
+      jdbcurl: jdbc:h2:mem:oraltest;MODE=Oracle
+      driver-class-name: org.h2.Driver
+      sql-script-encoding: utf-8
+      username: sa
+      password:
+
+      initialization-mode: always
+
+      schema-location: schema-test-ora.sql
+      config-location: classpath:/sql/Db1SqlMapConfig.xml
+      mapper-locations: classpath:/sql/mapper/db1/**/*.xml
+
+    jpa:
+      defer-datasource-initialization: true
+      hibernate:
+        ddl-auto: create-drop
+
+
+  db2:
+    h2:
+      console:
+        enabled: true                            # h2 콘솔 사용
+        path: /h2                                    # localhost:port/h2 로 접근 가능
+        settings:
+          trace: false                        # Print additional trace information
+          web-allow-others: true    # 브라우저로 접근가능하게 하기
+
+    datasource:
+      jdbc-url: jdbc:h2:mem:posttest;MODE=PostgreSQL
+      jdbcurl: jdbc:h2:mem:posttest;MODE=PostgreSQL
+      driver-class-name: org.h2.Driver
+      sql-script-encoding: utf-8
+      username: sa
+      password:
+
+      initialization-mode: always
+
+      schema-location: schema-test-pos.sql
+      config-location: classpath:/sql/Db2SqlMapConfig.xml
+      mapper-locations: classpath:/sql/mapper/db2/**/*.xml
+
+    jpa:
+      defer-datasource-initialization: true
+      hibernate:
+        ddl-auto: create-drop

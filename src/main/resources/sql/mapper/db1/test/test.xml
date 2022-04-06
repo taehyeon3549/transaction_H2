@@ -4,7 +4,7 @@
 <mapper namespace="com.winitech.transaction.mapper.TestMapper">
 
     <insert id="insert" parameterType="String">
-
+        insert into image values(null,null)
     </insert>
 
     <select id="selectList" resultType="Map">

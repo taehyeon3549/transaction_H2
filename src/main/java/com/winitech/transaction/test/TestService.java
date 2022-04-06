@@ -4,10 +4,9 @@ import com.winitech.transaction.mapper.SetTestMapper2;
 import com.winitech.transaction.mapper.TestMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.apache.ibatis.session.SqlSession;
-import org.apache.ibatis.session.SqlSessionFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -16,10 +15,6 @@ public class TestService {
     final TestMapper testMapper;
 
     final SetTestMapper2 setTestMapper2;
-
-    final SqlSessionFactory db3SqlSessionFactory;
-
-    final SqlSession db3SqlSession;
 
 
     /**
@@ -62,13 +57,17 @@ public class TestService {
     }
 
 
-    public String test3(){
-        return setTestMapper2.selectList().toString();
+    public List<Map<?,?>> test3(){
+        return testMapper.selectList();
     }
 
-    public String test11(){
-        return db3SqlSession
-                .selectList("com.winitech.transaction.mapper.TestMapper.selectList")
-                .toString();
+    public List<Map<?,?>> test33(){
+        return setTestMapper2.selectList();
     }
+
+//    public String test11(){
+//        return db3SqlSession
+//                .selectList("com.winitech.transaction.mapper.TestMapper.selectList")
+//                .toString();
+//    }
 }
