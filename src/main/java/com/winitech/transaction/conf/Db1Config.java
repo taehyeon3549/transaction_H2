@@ -1,6 +1,6 @@
 package com.winitech.transaction.conf;
 
-import com.winitech.transaction.mapper.db1.Db1ConnMapper;
+import com.winitech.transaction.mapper.Db1ConnMapper;
 import com.zaxxer.hikari.HikariDataSource;
 import lombok.extern.log4j.Log4j2;
 import org.apache.ibatis.session.SqlSession;
@@ -16,26 +16,48 @@ import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
+import org.springframework.context.annotation.Profile;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import org.springframework.jdbc.datasource.init.DataSourceInitializer;
+import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
 
 import javax.sql.DataSource;
 import java.util.Arrays;
 
 @Configuration
-@MapperScan(basePackages = "com.winitech.transaction.mapper.db1", annotationClass= Db1ConnMapper.class, sqlSessionFactoryRef = "db1SqlSessionFactory")
+@MapperScan(basePackages = "com.winitech.transaction.mapper" ,annotationClass= Db1ConnMapper.class, sqlSessionFactoryRef = "db1SqlSessionFactory")
 @Log4j2
-//@MapperScan("com.winitech.transaction.mapper")		//@Mapper 어노테이션을 사용했으므로 비활성화, package단위로 scan 가능
 public class Db1Config {
 	@Value("${spring.db1.datasource.config-location}")	    String config;
     @Value("${spring.db1.datasource.mapper-locations}")		String mapper;
+
+	@Value("${spring.db1.datasource.schema-location}")		String schema;
 
 	@Bean(name="db1DataSource")
 	@ConfigurationProperties(prefix="spring.db1.datasource")
 	public DataSource db1DbSource() {
 		return DataSourceBuilder.create().type(HikariDataSource.class).build();
+	}
+
+	/**
+	 * 프로파일이 test 이면 in memory h2 DB에 실행할 스크립트 실행
+	 * */
+	@Profile("test")
+	@Bean(name="db1H2DataSourceInitializer")
+	public DataSourceInitializer db1DataSourceInitializer(@Qualifier("db1DataSource") DataSource datasource) {
+		log.info("============== DB1 schema-location : {}", new ClassPathResource(schema).getFilename());
+
+		ResourceDatabasePopulator resourceDatabasePopulator = new ResourceDatabasePopulator();
+		resourceDatabasePopulator.addScript(new ClassPathResource(schema));
+
+		DataSourceInitializer dataSourceInitializer = new DataSourceInitializer();
+		dataSourceInitializer.setDataSource(datasource);
+		dataSourceInitializer.setDatabasePopulator(resourceDatabasePopulator);
+
+		return dataSourceInitializer;
 	}
 
 	@Bean(name="db1SqlSessionFactory")
@@ -44,13 +66,8 @@ public class Db1Config {
 			ApplicationContext applicationContext
 	) throws Exception
 	{
-		log.info("config-location : {}", applicationContext.getResource(config).getFilename());
-//		log.info("mapper-locations : {}", applicationContext.getResources(mapper).getFilename());
-
-		Arrays.stream(applicationContext.getResources(mapper)).forEach(p->{
-			log.info("파일명 :: {}", p.getFilename());
-		});
-
+		log.info("============== DB1 config-location : {}", applicationContext.getResource(config).getFilename());
+		log.info("============== DB1 mapper-location : {}", applicationContext.getResource(mapper).getFilename());
 
 	    SqlSessionFactoryBean factoryBean = new SqlSessionFactoryBean();
 	    factoryBean.setDataSource(dataSource);
@@ -63,12 +80,12 @@ public class Db1Config {
 	}
 
 	@Bean(name="db1SqlSession")
-	public SqlSession db1sqlSessionTemplate(@Autowired @Qualifier("db1SqlSessionFactory") SqlSessionFactory sqlSessionFactory) {
+	public SqlSession db1SqlSessionTemplate(@Autowired @Qualifier("db1SqlSessionFactory") SqlSessionFactory sqlSessionFactory) {
 	    return new SqlSessionTemplate(sqlSessionFactory);
 	}
 
 	@Bean(name="db1TransactionManager")
-	public DataSourceTransactionManager db1transactionManager(@Autowired @Qualifier("db1DataSource") DataSource dataSource) {
+	public DataSourceTransactionManager db1TransactionManager(@Autowired @Qualifier("db1DataSource") DataSource dataSource) {
 	    return new DataSourceTransactionManager(dataSource);
 	}
 }

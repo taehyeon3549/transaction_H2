@@ -1,7 +1,6 @@
 package com.winitech.transaction.test;
 
-import com.winitech.transaction.mapper.db1.TestMapper;
-import lombok.RequiredArgsConstructor;
+import com.winitech.transaction.mapper.TestMapper;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -149,4 +148,18 @@ public class TestController {
             return "fail";
         }
     }
+
+    @GetMapping("/testing7")
+    public String testing7(){
+        StringBuffer buffer = new StringBuffer();
+        buffer.append(testService.test3().toString());
+        buffer.append(testService.test4().toString());
+
+        return buffer.toString();
+    }
+
+//    @GetMapping("/testing8")
+//    public String testing8(){
+//        return testService.test11();
+//    }
 }

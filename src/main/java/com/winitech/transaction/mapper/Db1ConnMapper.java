@@ -1,4 +1,4 @@
-package com.winitech.transaction.mapper.db2;
+package com.winitech.transaction.mapper;
 
 import org.springframework.stereotype.Component;
 
@@ -8,6 +8,6 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 @Component
-public @interface Db2ConnMapper {
+public @interface Db1ConnMapper {
     String value() default "";
 }
